@@ -22,6 +22,9 @@ artifacts/
 *.mdf
 *.ldf
 *.ndf
+*.db
+*.db-shm
+*.db-wal
 
 ## Node
 node_modules/

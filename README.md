@@ -98,7 +98,7 @@ KTV/
 ## Prerequisites
 
 - .NET 8.0 SDK
-- SQL Server or SQL Server LocalDB
+- SQL Server or SQL Server LocalDB (or SQLite for development)
 - Node.js 18+ and npm
 
 ## Setup Instructions
@@ -110,7 +110,22 @@ KTV/
    cd src/KTV.API
    ```
 
-2. Update the connection string in `appsettings.json` if needed
+2. **Database Configuration**:
+   
+   The project is configured to use SQLite by default for development/testing. To use SQL Server in production:
+   
+   - Update `appsettings.json` connection string:
+     ```json
+     "ConnectionStrings": {
+       "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=KTVWorkflowDb;Trusted_Connection=true;MultipleActiveResultSets=true"
+     }
+     ```
+   
+   - Update `Program.cs` to use SQL Server:
+     ```csharp
+     builder.Services.AddDbContext<ApplicationDbContext>(options =>
+         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+     ```
 
 3. Apply database migrations:
    ```bash
@@ -122,7 +137,7 @@ KTV/
    dotnet run
    ```
 
-The API will be available at `http://localhost:5000` (or the port shown in console)
+The API will be available at `http://localhost:5028` (or the port shown in console)
 
 ### Frontend (React Client)
 
@@ -136,7 +151,7 @@ The API will be available at `http://localhost:5000` (or the port shown in conso
    npm install
    ```
 
-3. Update API URL in `src/services/api.js` if needed (default: `http://localhost:5000/api`)
+3. Update API URL in `src/services/api.js` if needed (default: `http://localhost:5028/api`)
 
 4. Run the development server:
    ```bash
