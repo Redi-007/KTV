@@ -1,0 +1,6 @@
+@KTV.API_HostAddress = http://localhost:5028
+
+GET {{KTV.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
