@@ -5,7 +5,11 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Join-Path $scriptDir '..'
 
 # Configurable timeout (seconds) via environment variable VITE_START_TIMEOUT, default 120
-$timeoutSec = [int]::TryParse($(Get-Item Env:VITE_START_TIMEOUT).Value, [ref]0) ? [int]$env:VITE_START_TIMEOUT : 120
+if ($env:VITE_START_TIMEOUT -and [int]::TryParse($env:VITE_START_TIMEOUT, [ref]0)) {
+	$timeoutSec = [int]$env:VITE_START_TIMEOUT
+} else {
+	$timeoutSec = 120
+}
 
 # Create logs directory
 $logsDir = Join-Path $repoRoot 'scripts\logs'
