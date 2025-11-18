@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+            policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5000")
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
@@ -59,5 +59,8 @@ app.UseCors("AllowReactApp");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Lightweight health endpoint used by the dev start helper and external monitors
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run();

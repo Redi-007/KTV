@@ -20,45 +20,62 @@ import {
   mockTaskHistory,
 } from '@/lib/mockData'
 
-const API_BASE_URL = '/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE || '/api'
+
+const USE_BACKEND = Boolean(import.meta.env.VITE_API_BASE)
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+async function request<T>(path: string, opts: RequestInit = {}): Promise<T> {
+  const url = API_BASE_URL.replace(/\/$/, '') + path
+  const res = await fetch(url, {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    ...opts,
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`Request failed ${res.status} ${res.statusText} - ${text}`)
+  }
+  if (res.status === 204) return undefined as unknown as T
+  return res.json() as Promise<T>
+}
 
 export const api = {
   users: {
     getAll: async (): Promise<User[]> => {
-      await delay(300)
-      return mockUsers
+      if (!USE_BACKEND) { await delay(300); return mockUsers }
+      return request<User[]>('/users')
     },
     getById: async (id: string): Promise<User | undefined> => {
-      await delay(200)
-      return mockUsers.find(u => u.id === id)
+      if (!USE_BACKEND) { await delay(200); return mockUsers.find(u => u.id === id) }
+      return request<User>(`/users/${id}`)
     },
     getCurrent: async (): Promise<User> => {
-      await delay(200)
-      return mockUsers[0]
+      if (!USE_BACKEND) { await delay(200); return mockUsers[0] }
+      return request<User>('/users/current')
     },
   },
 
   institutions: {
     getAll: async (): Promise<Institution[]> => {
-      await delay(300)
-      return mockInstitutions
+      if (!USE_BACKEND) { await delay(300); return mockInstitutions }
+      return request<Institution[]>('/institutions')
     },
     getById: async (id: string): Promise<Institution | undefined> => {
-      await delay(200)
-      return mockInstitutions.find(i => i.id === id)
+      if (!USE_BACKEND) { await delay(200); return mockInstitutions.find(i => i.id === id) }
+      return request<Institution>(`/institutions/${id}`)
     },
   },
 
   workflows: {
     getAll: async (): Promise<Workflow[]> => {
-      await delay(300)
-      return mockWorkflows
+      if (!USE_BACKEND) { await delay(300); return mockWorkflows }
+      return request<Workflow[]>('/workflows')
     },
     getById: async (id: string): Promise<Workflow | undefined> => {
-      await delay(200)
-      return mockWorkflows.find(w => w.id === id)
+      if (!USE_BACKEND) { await delay(200); return mockWorkflows.find(w => w.id === id) }
+      return request<Workflow>(`/workflows/${id}`)
     },
   },
 
@@ -69,54 +86,49 @@ export const api = {
       institutionId?: string
       assigneeId?: string
     }): Promise<Task[]> => {
-      await delay(400)
-      let filtered = [...mockTasks]
-      
-      if (filters?.status) {
-        filtered = filtered.filter(t => t.status === filters.status)
+      if (!USE_BACKEND) {
+        await delay(400)
+        let filtered = [...mockTasks]
+        if (filters?.status) filtered = filtered.filter(t => t.status === filters.status)
+        if (filters?.workflowId) filtered = filtered.filter(t => t.workflowId === filters.workflowId)
+        if (filters?.institutionId) filtered = filtered.filter(t => t.institutionId === filters.institutionId)
+        if (filters?.assigneeId) filtered = filtered.filter(t => t.assigneeId === filters.assigneeId)
+        return filtered
       }
-      if (filters?.workflowId) {
-        filtered = filtered.filter(t => t.workflowId === filters.workflowId)
-      }
-      if (filters?.institutionId) {
-        filtered = filtered.filter(t => t.institutionId === filters.institutionId)
-      }
-      if (filters?.assigneeId) {
-        filtered = filtered.filter(t => t.assigneeId === filters.assigneeId)
-      }
-      
-      return filtered
+      const params = new URLSearchParams()
+      if (filters?.status) params.set('status', String(filters.status))
+      if (filters?.workflowId) params.set('workflowId', filters.workflowId)
+      if (filters?.institutionId) params.set('institutionId', filters.institutionId)
+      if (filters?.assigneeId) params.set('assigneeId', filters.assigneeId)
+      const q = params.toString() ? `?${params.toString()}` : ''
+      return request<Task[]>(`/tasks${q}`)
     },
-    
+
     getById: async (id: string): Promise<Task | undefined> => {
-      await delay(200)
-      return mockTasks.find(t => t.id === id)
+      if (!USE_BACKEND) { await delay(200); return mockTasks.find(t => t.id === id) }
+      return request<Task>(`/tasks/${id}`)
     },
-    
+
     update: async (id: string, updates: Partial<Task>): Promise<Task> => {
-      await delay(300)
-      const task = mockTasks.find(t => t.id === id)
-      if (!task) throw new Error('Task not found')
-      return { ...task, ...updates, updatedAt: new Date().toISOString() }
+      if (!USE_BACKEND) { await delay(300); const task = mockTasks.find(t => t.id === id); if (!task) throw new Error('Task not found'); return { ...task, ...updates, updatedAt: new Date().toISOString() } }
+      return request<Task>(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(updates) })
     },
-    
+
     updateStatus: async (id: string, status: TaskStatus): Promise<Task> => {
-      await delay(300)
-      const task = mockTasks.find(t => t.id === id)
-      if (!task) throw new Error('Task not found')
-      return { ...task, status, updatedAt: new Date().toISOString() }
+      if (!USE_BACKEND) { await delay(300); const task = mockTasks.find(t => t.id === id); if (!task) throw new Error('Task not found'); return { ...task, status, updatedAt: new Date().toISOString() } }
+      return request<Task>(`/tasks/${id}/move`, { method: 'POST', body: JSON.stringify({ toStepId: status }) })
     },
-    
+
     getHistory: async (taskId: string): Promise<TaskHistory[]> => {
-      await delay(200)
-      return mockTaskHistory.filter(h => h.taskId === taskId)
+      if (!USE_BACKEND) { await delay(200); return mockTaskHistory.filter(h => h.taskId === taskId) }
+      return request<TaskHistory[]>(`/tasks/${taskId}/history`)
     },
   },
 
   activities: {
     getRecent: async (limit: number = 10): Promise<ActivityItem[]> => {
-      await delay(300)
-      return mockActivities.slice(0, limit)
+      if (!USE_BACKEND) { await delay(300); return mockActivities.slice(0, limit) }
+      return request<ActivityItem[]>(`/activities?limit=${limit}`)
     },
   },
 
@@ -125,28 +137,30 @@ export const api = {
       type?: Notification['type']
       unreadOnly?: boolean
     }): Promise<Notification[]> => {
-      await delay(300)
-      let filtered = [...mockNotifications]
-      
-      if (filters?.type) {
-        filtered = filtered.filter(n => n.type === filters.type)
+      if (!USE_BACKEND) {
+        await delay(300)
+        let filtered = [...mockNotifications]
+        if (filters?.type) filtered = filtered.filter(n => n.type === filters.type)
+        if (filters?.unreadOnly) filtered = filtered.filter(n => !n.read)
+        return filtered
       }
-      if (filters?.unreadOnly) {
-        filtered = filtered.filter(n => !n.read)
-      }
-      
-      return filtered
+      const params = new URLSearchParams()
+      if (filters?.type) params.set('type', filters.type)
+      if (filters?.unreadOnly) params.set('unreadOnly', String(filters.unreadOnly))
+      const q = params.toString() ? `?${params.toString()}` : ''
+      return request<Notification[]>(`/notifications${q}`)
     },
-    
+
     markAsRead: async (id: string): Promise<void> => {
-      await delay(200)
+      if (!USE_BACKEND) { await delay(200); return }
+      await request<void>(`/notifications/${id}/read`, { method: 'POST' })
     },
   },
 
   dashboard: {
     getStats: async (): Promise<DashboardStats> => {
-      await delay(400)
-      return mockDashboardStats
+      if (!USE_BACKEND) { await delay(400); return mockDashboardStats }
+      return request<DashboardStats>('/dashboard/stats')
     },
   },
 
@@ -157,27 +171,17 @@ export const api = {
       users: User[]
       institutions: Institution[]
     }> => {
-      await delay(400)
-      const q = query.toLowerCase()
-      
-      return {
-        tasks: mockTasks.filter(t => 
-          t.title.toLowerCase().includes(q) || 
-          t.description?.toLowerCase().includes(q)
-        ),
-        workflows: mockWorkflows.filter(w => 
-          w.name.toLowerCase().includes(q) || 
-          w.description?.toLowerCase().includes(q)
-        ),
-        users: mockUsers.filter(u => 
-          u.name.toLowerCase().includes(q) || 
-          u.email.toLowerCase().includes(q)
-        ),
-        institutions: mockInstitutions.filter(i => 
-          i.name.toLowerCase().includes(q) || 
-          i.type.toLowerCase().includes(q)
-        ),
+      if (!USE_BACKEND) {
+        await delay(400)
+        const q = query.toLowerCase()
+        return {
+          tasks: mockTasks.filter(t => t.title.toLowerCase().includes(q) || t.description?.toLowerCase().includes(q)),
+          workflows: mockWorkflows.filter(w => w.name.toLowerCase().includes(q) || w.description?.toLowerCase().includes(q)),
+          users: mockUsers.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)),
+          institutions: mockInstitutions.filter(i => i.name.toLowerCase().includes(q) || i.type.toLowerCase().includes(q)),
+        }
       }
+      return request(`/search?query=${encodeURIComponent(query)}`)
     },
   },
 }

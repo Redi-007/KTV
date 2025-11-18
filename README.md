@@ -82,6 +82,28 @@ PowerShell helper
 pwsh ./scripts/start-dev.ps1
 ```
 
+API / frontend integration
+- By default the frontend will use mock data. To use the real backend, set the environment variable `VITE_API_BASE` (for example `http://localhost:5028`) and restart the dev server.
+
+- Example (PowerShell):
+
+```powershell
+# start API then frontend via the PS helper (helper waits for API readiness)
+pwsh ./scripts/start-dev.ps1
+
+# or set VITE_API_BASE explicitly and run frontend (Vite proxies /api to this URL in dev)
+$env:VITE_API_BASE = 'http://localhost:5028'
+npm run dev
+```
+
+Notes:
+- `vite` dev server proxies `/api` to the API endpoint configured in `VITE_API_BASE` (or `http://localhost:5028` by default).
+- If `VITE_API_BASE` is not set the app falls back to mock data so the UI remains functional without the backend.
+
+Health endpoint
+- The API exposes a lightweight readiness endpoint at `/health` which returns 200 OK and JSON `{ "status": "ok" }`.
+- The PowerShell start helper uses this endpoint to wait for the API before launching the frontend.
+
 
 ## Project Structure
 

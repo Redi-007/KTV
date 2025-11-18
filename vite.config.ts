@@ -22,4 +22,15 @@ export default defineConfig({
       '@': resolve(projectRoot, 'src')
     }
   },
+  server: {
+    proxy: {
+      // Proxy /api requests to backend during development. Uses VITE_API_BASE if present, otherwise localhost:5028
+      '/api': {
+        target: process.env.VITE_API_BASE || 'http://localhost:5028',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
 });
