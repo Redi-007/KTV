@@ -64,11 +64,11 @@ export function TasksPage() {
 
   const getStatusLabel = (status: TaskStatus) => {
     switch (status) {
-      case 'todo': return 'To Do'
-      case 'in-progress': return 'In Progress'
-      case 'review': return 'Review'
-      case 'completed': return 'Completed'
-      case 'blocked': return 'Blocked'
+      case 'todo': return 'Për t\'u Bërë'
+      case 'in-progress': return 'Në Proces'
+      case 'review': return 'Rishikim'
+      case 'completed': return 'E Përfunduar'
+      case 'blocked': return 'E Bllokuar'
     }
   }
 
@@ -83,29 +83,29 @@ export function TasksPage() {
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <FunnelSimple className="text-muted-foreground" />
-            <span className="text-sm font-medium">Filters:</span>
+            <span className="text-sm font-medium">Filtrat:</span>
           </div>
 
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Status" />
+              <SelectValue placeholder="Statusi" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="todo">To Do</SelectItem>
-              <SelectItem value="in-progress">In Progress</SelectItem>
-              <SelectItem value="review">Review</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="blocked">Blocked</SelectItem>
+              <SelectItem value="all">Të Gjitha Statuset</SelectItem>
+              <SelectItem value="todo">Për t'u Bërë</SelectItem>
+              <SelectItem value="in-progress">Në Proces</SelectItem>
+              <SelectItem value="review">Rishikim</SelectItem>
+              <SelectItem value="completed">E Përfunduar</SelectItem>
+              <SelectItem value="blocked">E Bllokuar</SelectItem>
             </SelectContent>
           </Select>
 
           <Select value={workflowFilter} onValueChange={setWorkflowFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Workflow" />
+              <SelectValue placeholder="Rrjedha e Punës" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Workflows</SelectItem>
+              <SelectItem value="all">Të Gjitha Rrjedhat</SelectItem>
               {mockWorkflows.map(wf => (
                 <SelectItem key={wf.id} value={wf.id}>{wf.name}</SelectItem>
               ))}
@@ -114,10 +114,10 @@ export function TasksPage() {
 
           <Select value={institutionFilter} onValueChange={setInstitutionFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Institution" />
+              <SelectValue placeholder="Institucioni" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Institutions</SelectItem>
+              <SelectItem value="all">Të Gjitha Institucionet</SelectItem>
               {mockInstitutions.map(inst => (
                 <SelectItem key={inst.id} value={inst.id}>{inst.name}</SelectItem>
               ))}
@@ -126,10 +126,10 @@ export function TasksPage() {
 
           <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Assignee" />
+              <SelectValue placeholder="Përgjegjësi" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Assignees</SelectItem>
+              <SelectItem value="all">Të Gjithë Përgjegjësit</SelectItem>
               {mockUsers.map(user => (
                 <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
               ))}
@@ -147,7 +147,7 @@ export function TasksPage() {
                 setAssigneeFilter('all')
               }}
             >
-              Clear Filters
+              Pastro Filtrat
             </Button>
           )}
         </div>
@@ -157,12 +157,12 @@ export function TasksPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Workflow</TableHead>
-              <TableHead>Step</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Assignee</TableHead>
-              <TableHead>Due Date</TableHead>
+              <TableHead>Titulli</TableHead>
+              <TableHead>Rrjedha e Punës</TableHead>
+              <TableHead>Hapi</TableHead>
+              <TableHead>Statusi</TableHead>
+              <TableHead>Përgjegjësi</TableHead>
+              <TableHead>Data e Afatit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -207,7 +207,7 @@ export function TasksPage() {
                       <span className="text-sm">{task.assigneeName}</span>
                     </div>
                   ) : (
-                    <span className="text-sm text-muted-foreground">Unassigned</span>
+                    <span className="text-sm text-muted-foreground">Pa Përgjegjës</span>
                   )}
                 </TableCell>
                 <TableCell>
@@ -216,7 +216,7 @@ export function TasksPage() {
                       {format(new Date(task.dueDate), 'PPP')}
                     </span>
                   ) : (
-                    <span className="text-muted-foreground">No due date</span>
+                    <span className="text-muted-foreground">Pa afat</span>
                   )}
                 </TableCell>
               </TableRow>

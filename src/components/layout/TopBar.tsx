@@ -56,16 +56,16 @@ export function TopBar({ title }: TopBarProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <User className="mr-2" size={16} />
-                  <span>Profile</span>
+                  <span>Profili</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <GearSix className="mr-2" size={16} />
-                  <span>Settings</span>
+                  <span>Cilësimet</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <SignOut className="mr-2" size={16} />
-                  <span>Sign out</span>
+                  <span>Dil</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

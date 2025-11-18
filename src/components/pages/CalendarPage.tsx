@@ -93,7 +93,7 @@ export function CalendarPage() {
             </Button>
           </div>
           <Button variant="outline" onClick={() => setCurrentDate(new Date())}>
-            Today
+            Sot
           </Button>
         </div>
 
@@ -102,20 +102,20 @@ export function CalendarPage() {
             variant={viewMode === 'month' ? 'default' : 'outline'}
             onClick={() => setViewMode('month')}
           >
-            Month
+            Muaji
           </Button>
           <Button
             variant={viewMode === 'week' ? 'default' : 'outline'}
             onClick={() => setViewMode('week')}
           >
-            Week
+            Java
           </Button>
         </div>
       </div>
 
       <Card className="p-4">
         <div className="grid grid-cols-7 gap-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          {['Die', 'Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht'].map(day => (
             <div key={day} className="text-center font-semibold text-sm text-muted-foreground py-2">
               {day}
             </div>
@@ -147,14 +147,14 @@ export function CalendarPage() {
                       <div className="font-medium truncate">{task.title}</div>
                       {task.dueDate && isOverdue(task.dueDate) && (
                         <Badge variant="destructive" className="text-[10px] h-4 mt-1">
-                          Overdue
+                          E vonuar
                         </Badge>
                       )}
                     </button>
                   ))}
                   {dayTasks.length > 3 && (
                     <div className="text-xs text-muted-foreground pl-1">
-                      +{dayTasks.length - 3} more
+                      +{dayTasks.length - 3} të tjera
                     </div>
                   )}
                 </div>

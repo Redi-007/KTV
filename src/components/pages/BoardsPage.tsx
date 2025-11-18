@@ -12,11 +12,11 @@ import { FunnelSimple, CalendarBlank } from '@phosphor-icons/react'
 import type { Task, TaskStatus } from '@/types'
 
 const COLUMNS: { id: TaskStatus; label: string }[] = [
-  { id: 'todo', label: 'To Do' },
-  { id: 'in-progress', label: 'In Progress' },
-  { id: 'review', label: 'Review' },
-  { id: 'completed', label: 'Completed' },
-  { id: 'blocked', label: 'Blocked' },
+  { id: 'todo', label: 'Për t\'u Bërë' },
+  { id: 'in-progress', label: 'Në Proces' },
+  { id: 'review', label: 'Rishikim' },
+  { id: 'completed', label: 'E Përfunduar' },
+  { id: 'blocked', label: 'E Bllokuar' },
 ]
 
 export function BoardsPage() {
@@ -72,9 +72,9 @@ export function BoardsPage() {
       setTasks(tasks.map(t => 
         t.id === draggedTask.id ? { ...t, status } : t
       ))
-      toast.success('Task moved successfully')
+      toast.success('Detyra u zhvendos me sukses')
     } catch (error) {
-      toast.error('Failed to move task')
+      toast.error('Dështoi zhvendosja e detyrës')
     }
 
     setDraggedTask(null)
@@ -99,15 +99,15 @@ export function BoardsPage() {
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <FunnelSimple className="text-muted-foreground" />
-            <span className="text-sm font-medium">Filters:</span>
+            <span className="text-sm font-medium">Filtrat:</span>
           </div>
 
           <Select value={workflowFilter} onValueChange={setWorkflowFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Workflow" />
+              <SelectValue placeholder="Rrjedha e Punës" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Workflows</SelectItem>
+              <SelectItem value="all">Të Gjitha Rrjedhat</SelectItem>
               {mockWorkflows.map(wf => (
                 <SelectItem key={wf.id} value={wf.id}>{wf.name}</SelectItem>
               ))}
@@ -116,10 +116,10 @@ export function BoardsPage() {
 
           <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Assignee" />
+              <SelectValue placeholder="Përgjegjësi" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Assignees</SelectItem>
+              <SelectItem value="all">Të Gjithë Përgjegjësit</SelectItem>
               {mockUsers.map(user => (
                 <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
               ))}
@@ -128,10 +128,10 @@ export function BoardsPage() {
 
           <Select value={labelFilter} onValueChange={setLabelFilter}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Label" />
+              <SelectValue placeholder="Etiketa" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Labels</SelectItem>
+              <SelectItem value="all">Të Gjitha Etiketat</SelectItem>
               {mockLabels.map(label => (
                 <SelectItem key={label.id} value={label.id}>{label.name}</SelectItem>
               ))}
@@ -162,7 +162,7 @@ export function BoardsPage() {
               <div className="flex flex-col gap-3 bg-muted/30 rounded-lg p-3 min-h-[500px]">
                 {columnTasks.length === 0 && (
                   <div className="text-center text-sm text-muted-foreground py-8">
-                    Drop tasks here
+                    Vendos detyrat këtu
                   </div>
                 )}
                 {columnTasks.map(task => (

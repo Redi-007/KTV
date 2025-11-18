@@ -29,20 +29,20 @@ export function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              My Tasks
+              Detyrat e Mia
             </CardTitle>
             <ListChecks className="text-primary" size={20} />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-semibold">{stats?.myTasks || 0}</div>
-            <p className="text-xs text-muted-foreground mt-1">Active assignments</p>
+            <p className="text-xs text-muted-foreground mt-1">Detyrime aktive</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Overdue Tasks
+              Detyra të Vonuara
             </CardTitle>
             <Warning className="text-destructive" size={20} />
           </CardHeader>
@@ -50,14 +50,14 @@ export function DashboardPage() {
             <div className="text-3xl font-semibold text-destructive">
               {stats?.overdueTasks || 0}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Require attention</p>
+            <p className="text-xs text-muted-foreground mt-1">Kërkojnë vëmendje</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Completed This Week
+              Përfunduar Këtë Javë
             </CardTitle>
             <CheckCircle className="text-accent" size={20} />
           </CardHeader>
@@ -65,7 +65,7 @@ export function DashboardPage() {
             <div className="text-3xl font-semibold text-accent">
               {stats?.completedThisWeek || 0}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Tasks finished</p>
+            <p className="text-xs text-muted-foreground mt-1">Detyra të përfunduara</p>
           </CardContent>
         </Card>
       </div>
@@ -73,7 +73,7 @@ export function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Tasks by Status</CardTitle>
+            <CardTitle>Detyrat sipas Statusit</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-3">
@@ -90,11 +90,11 @@ export function DashboardPage() {
                 }
                 
                 const statusLabels: Record<string, string> = {
-                  'todo': 'To Do',
-                  'in-progress': 'In Progress',
-                  'review': 'Review',
-                  'completed': 'Completed',
-                  'blocked': 'Blocked',
+                  'todo': 'Për t\'u Bërë',
+                  'in-progress': 'Në Proces',
+                  'review': 'Rishikim',
+                  'completed': 'E Përfunduar',
+                  'blocked': 'E Bllokuar',
                 }
                 
                 return (
@@ -120,7 +120,7 @@ export function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Aktiviteti i Fundit</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
@@ -137,7 +137,7 @@ export function DashboardPage() {
                       {activity.message}
                       {activity.taskTitle && (
                         <>
-                          {' on '}
+                          {' për '}
                           <span className="font-medium text-primary">{activity.taskTitle}</span>
                         </>
                       )}

@@ -52,7 +52,7 @@ export function SearchPage() {
           <MagnifyingGlass size={20} className="text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search for tasks, workflows, users, or institutions..."
+            placeholder="Kërko për detyra, rrjedha pune, përdorues, ose institucione..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 border-0 focus-visible:ring-0 shadow-none"
@@ -62,13 +62,13 @@ export function SearchPage() {
 
       {query.length > 0 && query.length <= 2 && (
         <Card className="p-8 text-center text-muted-foreground">
-          Type at least 3 characters to search
+          Shkruaj të paktën 3 karaktere për të kërkuar
         </Card>
       )}
 
       {query.length > 2 && totalResults === 0 && (
         <Card className="p-8 text-center text-muted-foreground">
-          No results found for "{query}"
+          Nuk u gjetën rezultate për "{query}"
         </Card>
       )}
 
@@ -76,16 +76,16 @@ export function SearchPage() {
         <Tabs defaultValue="tasks">
           <TabsList>
             <TabsTrigger value="tasks">
-              Tasks ({results.tasks.length})
+              Detyrat ({results.tasks.length})
             </TabsTrigger>
             <TabsTrigger value="workflows">
-              Workflows ({results.workflows.length})
+              Rrjedhat e Punës ({results.workflows.length})
             </TabsTrigger>
             <TabsTrigger value="users">
-              Users ({results.users.length})
+              Përdoruesit ({results.users.length})
             </TabsTrigger>
             <TabsTrigger value="institutions">
-              Institutions ({results.institutions.length})
+              Institucionet ({results.institutions.length})
             </TabsTrigger>
           </TabsList>
 

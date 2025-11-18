@@ -42,9 +42,9 @@ export function TaskDrawer() {
     try {
       await api.tasks.updateStatus(selectedTask.id, newStatus)
       setStatus(newStatus)
-      toast.success('Status updated successfully')
+      toast.success('Statusi u përditësua me sukses')
     } catch (error) {
-      toast.error('Failed to update status')
+      toast.error('Dështoi përditësimi i statusit')
     }
   }
 
@@ -56,9 +56,9 @@ export function TaskDrawer() {
         assigneeName: user?.name,
       })
       setAssigneeId(userId)
-      toast.success('Assignee updated successfully')
+      toast.success('Përgjegjësi u përditësua me sukses')
     } catch (error) {
-      toast.error('Failed to update assignee')
+      toast.error('Dështoi përditësimi i përgjegjësit')
     }
   }
 
@@ -68,9 +68,9 @@ export function TaskDrawer() {
         dueDate: date?.toISOString(),
       })
       setDueDate(date)
-      toast.success('Due date updated successfully')
+      toast.success('Data e afatit u përditësua me sukses')
     } catch (error) {
-      toast.error('Failed to update due date')
+      toast.error('Dështoi përditësimi i datës së afatit')
     }
   }
 
@@ -113,36 +113,36 @@ export function TaskDrawer() {
 
             <div className="flex flex-col gap-6">
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Workflow</label>
+                <label className="text-sm font-medium text-muted-foreground">Rrjedha e Punës</label>
                 <p className="text-sm mt-1">{selectedTask.workflowName}</p>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground">Current Step</label>
+                <label className="text-sm font-medium text-muted-foreground">Hapi Aktual</label>
                 <p className="text-sm mt-1">{selectedTask.currentStepName}</p>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Status</label>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Statusi</label>
                 <Select value={status} onValueChange={handleStatusChange}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todo">To Do</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-                    <SelectItem value="review">Review</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="blocked">Blocked</SelectItem>
+                    <SelectItem value="todo">Për t'u Bërë</SelectItem>
+                    <SelectItem value="in-progress">Në Proces</SelectItem>
+                    <SelectItem value="review">Rishikim</SelectItem>
+                    <SelectItem value="completed">E Përfunduar</SelectItem>
+                    <SelectItem value="blocked">E Bllokuar</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Assignee</label>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Përgjegjësi</label>
                 <Select value={assigneeId} onValueChange={handleAssigneeChange}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select assignee" />
+                    <SelectValue placeholder="Zgjidh përgjegjësin" />
                   </SelectTrigger>
                   <SelectContent>
                     {mockUsers.map(user => (
@@ -162,12 +162,12 @@ export function TaskDrawer() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Due Date</label>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Data e Afatit</label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-start">
                       <CalendarBlank className="mr-2" />
-                      {dueDate ? format(dueDate, 'PPP') : 'Select date'}
+                      {dueDate ? format(dueDate, 'PPP') : 'Zgjidh datën'}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -182,7 +182,7 @@ export function TaskDrawer() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Labels</label>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Etiketat</label>
                 <div className="flex flex-wrap gap-2">
                   {selectedTask.labels.map(label => (
                     <Badge key={label.id} variant="secondary">
@@ -190,17 +190,17 @@ export function TaskDrawer() {
                     </Badge>
                   ))}
                   {selectedTask.labels.length === 0 && (
-                    <p className="text-sm text-muted-foreground">No labels</p>
+                    <p className="text-sm text-muted-foreground">Pa etiketa</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Description</label>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Përshkrimi</label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Add a description..."
+                  placeholder="Shto një përshkrim..."
                   rows={4}
                 />
               </div>
@@ -210,17 +210,17 @@ export function TaskDrawer() {
               <div className="flex gap-2">
                 <Button className="flex-1">
                   <ArrowRight className="mr-2" />
-                  Move to Next Step
+                  Kalo në Hapin Tjetër
                 </Button>
                 <Button variant="outline" className="flex-1">
-                  Change Status
+                  Ndrysho Statusin
                 </Button>
               </div>
 
               <Separator />
 
               <div>
-                <h3 className="text-sm font-semibold mb-4">History</h3>
+                <h3 className="text-sm font-semibold mb-4">Historiku</h3>
                 <div className="flex flex-col gap-3">
                   {history.map((item) => (
                     <div key={item.id} className="flex gap-3">

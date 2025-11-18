@@ -19,14 +19,14 @@ export function AdminWorkflowsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Workflows</h3>
+          <h3 className="text-lg font-semibold">Rrjedhat e Punës</h3>
           <p className="text-sm text-muted-foreground">
-            Manage workflow definitions and process steps
+            Menaxho përkufizimet e rrjedhave të punës dhe hapat e proceseve
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New Workflow
+          Rrjedhë e Re
         </Button>
       </div>
 
@@ -34,12 +34,12 @@ export function AdminWorkflowsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Steps</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Emri</TableHead>
+              <TableHead>Përshkrimi</TableHead>
+              <TableHead>Hapat</TableHead>
+              <TableHead>Statusi</TableHead>
+              <TableHead>Krijuar më</TableHead>
+              <TableHead className="text-right">Veprimet</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -54,14 +54,14 @@ export function AdminWorkflowsPage() {
                   <Badge
                     variant={workflow.status === 'active' ? 'default' : 'secondary'}
                   >
-                    {workflow.status}
+                    {workflow.status === 'active' ? 'Aktiv' : 'Joaktiv'}
                   </Badge>
                 </TableCell>
                 <TableCell>{format(new Date(workflow.createdAt), 'PP')}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm">
                     <PencilSimple className="mr-2" size={16} />
-                    Edit
+                    Ndrysho
                   </Button>
                 </TableCell>
               </TableRow>

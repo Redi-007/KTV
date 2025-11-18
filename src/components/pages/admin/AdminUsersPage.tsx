@@ -27,14 +27,14 @@ export function AdminUsersPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Users</h3>
+          <h3 className="text-lg font-semibold">Përdoruesit</h3>
           <p className="text-sm text-muted-foreground">
-            Manage system users and permissions
+            Menaxho përdoruesit e sistemit dhe lejet
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New User
+          Përdorues i Ri
         </Button>
       </div>
 
@@ -42,11 +42,11 @@ export function AdminUsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
+              <TableHead>Përdoruesi</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Institution</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Institucioni</TableHead>
+              <TableHead>Roli</TableHead>
+              <TableHead className="text-right">Veprimet</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -72,7 +72,7 @@ export function AdminUsersPage() {
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm">
                     <PencilSimple className="mr-2" size={16} />
-                    Edit
+                    Ndrysho
                   </Button>
                 </TableCell>
               </TableRow>

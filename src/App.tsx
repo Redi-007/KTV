@@ -41,20 +41,20 @@ function App() {
 
   const getPageTitle = (): string => {
     switch (currentPage) {
-      case 'dashboard': return 'Dashboard'
-      case 'tasks': return 'Tasks'
-      case 'boards': return 'Kanban Boards'
-      case 'calendar': return 'Calendar'
-      case 'notifications': return 'Notifications'
-      case 'search': return 'Search'
-      case 'admin-workflows': return 'Admin: Workflows'
-      case 'admin-institutions': return 'Admin: Institutions'
-      case 'admin-roles': return 'Admin: Roles & Permissions'
-      case 'admin-templates': return 'Admin: Board Templates'
-      case 'admin-labels': return 'Admin: Statuses & Labels'
-      case 'admin-users': return 'Admin: Users'
-      case 'admin-analytics': return 'Admin: Analytics'
-      case 'admin-settings': return 'Admin: Settings'
+      case 'dashboard': return 'Paneli Kryesor'
+      case 'tasks': return 'Detyrat'
+      case 'boards': return 'Tabelat Kanban'
+      case 'calendar': return 'Kalendari'
+      case 'notifications': return 'Njoftimet'
+      case 'search': return 'Kërko'
+      case 'admin-workflows': return 'Administrimi: Rrjedhat e Punës'
+      case 'admin-institutions': return 'Administrimi: Institucionet'
+      case 'admin-roles': return 'Administrimi: Rolet & Lejet'
+      case 'admin-templates': return 'Administrimi: Shabllonet e Tabelave'
+      case 'admin-labels': return 'Administrimi: Statuset & Etiketat'
+      case 'admin-users': return 'Administrimi: Përdoruesit'
+      case 'admin-analytics': return 'Administrimi: Analitika'
+      case 'admin-settings': return 'Administrimi: Cilësimet'
     }
   }
 

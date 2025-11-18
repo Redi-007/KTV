@@ -27,29 +27,29 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
   const [adminExpanded, setAdminExpanded] = useState(false)
 
   const mainItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: SquaresFour },
-    { id: 'tasks', label: 'Tasks', icon: ListChecks },
-    { id: 'boards', label: 'Boards', icon: Kanban },
-    { id: 'calendar', label: 'Calendar', icon: Calendar },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'search', label: 'Search', icon: MagnifyingGlass },
+    { id: 'dashboard', label: 'Paneli Kryesor', icon: SquaresFour },
+    { id: 'tasks', label: 'Detyrat', icon: ListChecks },
+    { id: 'boards', label: 'Tabelat', icon: Kanban },
+    { id: 'calendar', label: 'Kalendari', icon: Calendar },
+    { id: 'notifications', label: 'Njoftimet', icon: Bell },
+    { id: 'search', label: 'Kërko', icon: MagnifyingGlass },
   ]
 
   const adminItems = [
-    { id: 'admin-workflows', label: 'Workflows', icon: FlowArrow },
-    { id: 'admin-institutions', label: 'Institutions', icon: Buildings },
-    { id: 'admin-roles', label: 'Roles & Permissions', icon: ShieldCheck },
-    { id: 'admin-templates', label: 'Board Templates', icon: TemplateIcon },
-    { id: 'admin-labels', label: 'Statuses & Labels', icon: Tag },
-    { id: 'admin-users', label: 'Users', icon: Users },
-    { id: 'admin-analytics', label: 'Analytics', icon: ChartBar },
-    { id: 'admin-settings', label: 'Settings', icon: GearSix },
+    { id: 'admin-workflows', label: 'Rrjedhat e Punës', icon: FlowArrow },
+    { id: 'admin-institutions', label: 'Institucionet', icon: Buildings },
+    { id: 'admin-roles', label: 'Rolet & Lejet', icon: ShieldCheck },
+    { id: 'admin-templates', label: 'Shabllonet e Tabelave', icon: TemplateIcon },
+    { id: 'admin-labels', label: 'Statuset & Etiketat', icon: Tag },
+    { id: 'admin-users', label: 'Përdoruesit', icon: Users },
+    { id: 'admin-analytics', label: 'Analitika', icon: ChartBar },
+    { id: 'admin-settings', label: 'Cilësimet', icon: GearSix },
   ]
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 border-r border-border bg-[var(--sidebar-background)] flex flex-col">
       <div className="p-6 border-b border-[var(--sidebar-border)]">
-        <h1 className="text-xl font-semibold text-foreground">Workflow Manager</h1>
+        <h1 className="text-xl font-semibold text-foreground">Menaxher Punimesh</h1>
       </div>
 
       <nav className="flex-1 overflow-y-auto p-4">
@@ -79,7 +79,7 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
               onClick={() => setAdminExpanded(!adminExpanded)}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-muted-foreground hover:bg-muted w-full transition-colors"
             >
-              <span className="flex-1 text-left">Admin</span>
+              <span className="flex-1 text-left">Administrimi</span>
               <CaretDown
                 className={cn(
                   'transition-transform shrink-0',

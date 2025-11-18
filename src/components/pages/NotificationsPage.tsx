@@ -67,7 +67,7 @@ export function NotificationsPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bell size={24} />
-          <h3 className="text-lg font-semibold">Notifications</h3>
+          <h3 className="text-lg font-semibold">Njoftimet</h3>
           {unreadCount > 0 && (
             <Badge variant="destructive">{unreadCount}</Badge>
           )}
@@ -80,23 +80,23 @@ export function NotificationsPage() {
             })
           }}
         >
-          Mark all as read
+          Shëno të gjitha si të lexuara
         </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="mentions">Mentions</TabsTrigger>
-          <TabsTrigger value="tasks">My Tasks</TabsTrigger>
-          <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
+          <TabsTrigger value="all">Të Gjitha</TabsTrigger>
+          <TabsTrigger value="mentions">Përmendje</TabsTrigger>
+          <TabsTrigger value="tasks">Detyrat e Mia</TabsTrigger>
+          <TabsTrigger value="deadlines">Afatet</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-6">
           <div className="flex flex-col gap-3">
             {filteredNotifications.length === 0 && (
               <Card className="p-8 text-center text-muted-foreground">
-                No notifications to show
+                Nuk ka njoftime për të shfaqur
               </Card>
             )}
             {filteredNotifications.map(notification => (
@@ -115,7 +115,7 @@ export function NotificationsPage() {
                     <p className="text-sm font-medium">{notification.message}</p>
                     {notification.taskTitle && (
                       <p className="text-sm text-muted-foreground mt-1">
-                        Task: {notification.taskTitle}
+                        Detyra: {notification.taskTitle}
                       </p>
                     )}
                     <p className="text-xs text-muted-foreground mt-2">
@@ -123,7 +123,7 @@ export function NotificationsPage() {
                     </p>
                   </div>
                   {!notification.read && (
-                    <Badge variant="default" className="shrink-0 h-6">New</Badge>
+                    <Badge variant="default" className="shrink-0 h-6">E Re</Badge>
                   )}
                 </div>
               </Card>

@@ -7,19 +7,19 @@ export function AdminRolesPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Roles & Permissions</h3>
+          <h3 className="text-lg font-semibold">Rolet & Lejet</h3>
           <p className="text-sm text-muted-foreground">
-            Configure user roles and access permissions
+            Konfiguro rolet e përdoruesve dhe lejet e qasjes
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New Role
+          Rol i Ri
         </Button>
       </div>
 
       <Card className="p-8 text-center text-muted-foreground">
-        Role and permission management interface coming soon
+        Ndërfaqja e menaxhimit të roleve dhe lejeve vjen së shpejti
       </Card>
     </div>
   )
@@ -30,19 +30,19 @@ export function AdminTemplatesPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Board Templates</h3>
+          <h3 className="text-lg font-semibold">Shabllonet e Tabelave</h3>
           <p className="text-sm text-muted-foreground">
-            Create and manage kanban board templates
+            Krijo dhe menaxho shabllonet e tabelave kanban
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New Template
+          Shabllo e Re
         </Button>
       </div>
 
       <Card className="p-8 text-center text-muted-foreground">
-        Board template management interface coming soon
+        Ndërfaqja e menaxhimit të shablloneve të tabelave vjen së shpejti
       </Card>
     </div>
   )
@@ -53,19 +53,19 @@ export function AdminLabelsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Statuses & Labels</h3>
+          <h3 className="text-lg font-semibold">Statuset & Etiketat</h3>
           <p className="text-sm text-muted-foreground">
-            Manage task statuses and label definitions
+            Menaxho statuset e detyrave dhe përkufizimet e etiketave
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New Label
+          Etiketë e Re
         </Button>
       </div>
 
       <Card className="p-8 text-center text-muted-foreground">
-        Status and label management interface coming soon
+        Ndërfaqja e menaxhimit të statuseve dhe etiketave vjen së shpejti
       </Card>
     </div>
   )
@@ -75,14 +75,14 @@ export function AdminAnalyticsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h3 className="text-lg font-semibold">Analytics</h3>
+        <h3 className="text-lg font-semibold">Analitika</h3>
         <p className="text-sm text-muted-foreground">
-          View system analytics and performance metrics
+          Shiko analitikën e sistemit dhe metrikat e performancës
         </p>
       </div>
 
       <Card className="p-8 text-center text-muted-foreground">
-        Analytics dashboard coming soon
+        Paneli i analitikës vjen së shpejti
       </Card>
     </div>
   )
@@ -92,14 +92,14 @@ export function AdminSettingsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h3 className="text-lg font-semibold">Settings</h3>
+        <h3 className="text-lg font-semibold">Cilësimet</h3>
         <p className="text-sm text-muted-foreground">
-          Configure system-wide settings and preferences
+          Konfiguro cilësimet dhe preferencat në nivel sistemi
         </p>
       </div>
 
       <Card className="p-8 text-center text-muted-foreground">
-        Settings interface coming soon
+        Ndërfaqja e cilësimeve vjen së shpejti
       </Card>
     </div>
   )

@@ -19,14 +19,14 @@ export function AdminInstitutionsPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Institutions</h3>
+          <h3 className="text-lg font-semibold">Institucionet</h3>
           <p className="text-sm text-muted-foreground">
-            Manage organizational institutions
+            Menaxho institucionet organizative
           </p>
         </div>
         <Button>
           <Plus className="mr-2" />
-          New Institution
+          Institucion i Ri
         </Button>
       </div>
 
@@ -34,11 +34,11 @@ export function AdminInstitutionsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Emri</TableHead>
+              <TableHead>Lloji</TableHead>
+              <TableHead>Statusi</TableHead>
+              <TableHead>Krijuar më</TableHead>
+              <TableHead className="text-right">Veprimet</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -48,14 +48,14 @@ export function AdminInstitutionsPage() {
                 <TableCell>{institution.type}</TableCell>
                 <TableCell>
                   <Badge variant={institution.active ? 'default' : 'secondary'}>
-                    {institution.active ? 'Active' : 'Inactive'}
+                    {institution.active ? 'Aktiv' : 'Joaktiv'}
                   </Badge>
                 </TableCell>
                 <TableCell>{format(new Date(institution.createdAt), 'PP')}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm">
                     <PencilSimple className="mr-2" size={16} />
-                    Edit
+                    Ndrysho
                   </Button>
                 </TableCell>
               </TableRow>
