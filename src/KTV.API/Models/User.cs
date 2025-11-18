@@ -16,4 +16,5 @@ public class User
     public Institution? Institution { get; set; }
     public ICollection<Role> Roles { get; set; } = new List<Role>();
     public ICollection<Task> AssignedTasks { get; set; } = new List<Task>();
+    public ICollection<TaskShare> SharedTasks { get; set; } = new List<TaskShare>();
 }

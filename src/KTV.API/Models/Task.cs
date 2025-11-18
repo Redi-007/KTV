@@ -22,4 +22,5 @@ public class Task
     
     public ICollection<TaskStatusHistory> StatusHistory { get; set; } = new List<TaskStatusHistory>();
     public ICollection<Label> Labels { get; set; } = new List<Label>();
+    public ICollection<TaskShare> SharedWith { get; set; } = new List<TaskShare>();
 }

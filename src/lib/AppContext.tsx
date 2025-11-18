@@ -8,6 +8,8 @@ interface AppContextType {
   setSelectedTask: (task: Task | null) => void
   isTaskDrawerOpen: boolean
   openTaskDrawer: (task: Task) => void
+  isCreateMode: boolean
+  openCreateTaskDrawer: () => void
   closeTaskDrawer: () => void
 }
 
@@ -17,6 +19,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isTaskDrawerOpen, setIsTaskDrawerOpen] = useState(false)
+  const [isCreateMode, setIsCreateMode] = useState(false)
 
   useEffect(() => {
     api.users.getCurrent().then(setCurrentUser)
@@ -24,12 +27,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const openTaskDrawer = (task: Task) => {
     setSelectedTask(task)
+    setIsCreateMode(false)
+    setIsTaskDrawerOpen(true)
+  }
+
+  const openCreateTaskDrawer = () => {
+    setSelectedTask(null)
+    setIsCreateMode(true)
     setIsTaskDrawerOpen(true)
   }
 
   const closeTaskDrawer = () => {
     setIsTaskDrawerOpen(false)
     setTimeout(() => setSelectedTask(null), 300)
+    setIsCreateMode(false)
   }
 
   return (
@@ -39,7 +50,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         selectedTask,
         setSelectedTask,
         isTaskDrawerOpen,
-        openTaskDrawer,
+          openTaskDrawer,
+          isCreateMode,
+          openCreateTaskDrawer,
         closeTaskDrawer,
       }}
     >

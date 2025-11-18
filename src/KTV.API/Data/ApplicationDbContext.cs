@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Workflow> Workflows { get; set; }
     public DbSet<WorkflowStep> WorkflowSteps { get; set; }
     public DbSet<Models.Task> Tasks { get; set; }
+    public DbSet<TaskShare> TaskShares { get; set; }
     public DbSet<TaskStatusHistory> TaskStatusHistories { get; set; }
     public DbSet<Label> Labels { get; set; }
 
@@ -114,6 +115,25 @@ public class ApplicationDbContext : DbContext
             entity.HasMany(e => e.Labels)
                 .WithMany(l => l.Tasks)
                 .UsingEntity(j => j.ToTable("TaskLabels"));
+
+            entity.HasMany(e => e.SharedWith)
+                .WithOne(s => s.Task)
+                .HasForeignKey(s => s.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // TaskShare configuration
+        modelBuilder.Entity<TaskShare>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Task)
+                .WithMany(t => t.SharedWith)
+                .HasForeignKey(e => e.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.SharedTasks)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         // TaskStatusHistory configuration

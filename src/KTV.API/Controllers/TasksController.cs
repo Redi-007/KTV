@@ -101,7 +101,7 @@ public class TasksController : ControllerBase
             DueDate = dto.DueDate,
             WorkflowId = dto.WorkflowId,
             CurrentStepId = dto.CurrentStepId,
-            AssignedToUserId = dto.AssignedToUserId,
+            AssignedToUserId = dto.AssignedToUserId ?? (dto.AssignedToUserIds != null && dto.AssignedToUserIds.Any() ? dto.AssignedToUserIds.First() : null),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -113,8 +113,32 @@ public class TasksController : ControllerBase
             task.Labels = labels;
         }
 
+        // Persist TaskShare entries for multiple assignees if provided
+        var sharesToAdd = new List<TaskShare>();
+
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
+
+        if (dto.AssignedToUserIds != null && dto.AssignedToUserIds.Any())
+        {
+            var validUserIds = await _context.Users
+                .Where(u => dto.AssignedToUserIds.Contains(u.Id))
+                .Select(u => u.Id)
+                .ToListAsync();
+
+            foreach (var uid in validUserIds.Distinct())
+            {
+                // skip if same as AssignedToUserId (primary)
+                if (task.AssignedToUserId.HasValue && task.AssignedToUserId.Value == uid) continue;
+                sharesToAdd.Add(new TaskShare { TaskId = task.Id, UserId = uid });
+            }
+
+            if (sharesToAdd.Any())
+            {
+                _context.TaskShares.AddRange(sharesToAdd);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         await _context.Entry(task).Reference(t => t.Workflow).LoadAsync();
         await _context.Entry(task).Reference(t => t.CurrentStep).LoadAsync();
@@ -150,6 +174,7 @@ public class TasksController : ControllerBase
     {
         var task = await _context.Tasks
             .Include(t => t.Labels)
+            .Include(t => t.SharedWith)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (task == null)
@@ -175,6 +200,26 @@ public class TasksController : ControllerBase
                 .Where(l => dto.LabelIds.Contains(l.Id))
                 .ToListAsync();
             task.Labels = labels;
+        }
+
+        // Update TaskShare entries when AssignedToUserIds provided
+        if (dto.AssignedToUserIds != null)
+        {
+            // Remove existing shares
+            var existingShares = _context.TaskShares.Where(s => s.TaskId == task.Id);
+            _context.TaskShares.RemoveRange(existingShares);
+
+            var validUserIds = await _context.Users
+                .Where(u => dto.AssignedToUserIds.Contains(u.Id))
+                .Select(u => u.Id)
+                .ToListAsync();
+
+            var newShares = validUserIds.Distinct()
+                .Where(uid => !(task.AssignedToUserId.HasValue && task.AssignedToUserId.Value == uid))
+                .Select(uid => new TaskShare { TaskId = task.Id, UserId = uid })
+                .ToList();
+
+            if (newShares.Any()) _context.TaskShares.AddRange(newShares);
         }
 
         task.UpdatedAt = DateTime.UtcNow;
@@ -227,6 +272,17 @@ public class TasksController : ControllerBase
 
         // Update task's current step
         task.CurrentStepId = dto.ToStepId;
+        // Optionally assign to a different user when moving
+        if (dto.AssignToUserId.HasValue)
+        {
+            task.AssignedToUserId = dto.AssignToUserId;
+            // Also persist a TaskShare for the assigned user if needed
+            var exists = await _context.Users.AnyAsync(u => u.Id == dto.AssignToUserId.Value);
+            if (exists)
+            {
+                _context.TaskShares.Add(new TaskShare { TaskId = task.Id, UserId = dto.AssignToUserId.Value });
+            }
+        }
         task.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();

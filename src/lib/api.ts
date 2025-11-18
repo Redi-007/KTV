@@ -2,6 +2,7 @@ import type {
   User,
   Institution,
   Workflow,
+  Label,
   Task,
   ActivityItem,
   Notification,
@@ -13,6 +14,7 @@ import {
   mockUsers,
   mockInstitutions,
   mockWorkflows,
+  mockLabels,
   mockTasks,
   mockActivities,
   mockNotifications,
@@ -79,6 +81,17 @@ export const api = {
     },
   },
 
+  labels: {
+    getAll: async (): Promise<Label[]> => {
+      if (!USE_BACKEND) { await delay(200); return mockLabels }
+      return request<Label[]>('/labels')
+    },
+    getById: async (id: string): Promise<Label | undefined> => {
+      if (!USE_BACKEND) { await delay(100); return mockLabels.find(l => l.id === id) }
+      return request<Label>(`/labels/${id}`)
+    }
+  },
+
   tasks: {
     getAll: async (filters?: {
       status?: TaskStatus
@@ -114,6 +127,19 @@ export const api = {
       return request<Task>(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(updates) })
     },
 
+    delete: async (id: string): Promise<void> => {
+      if (!USE_BACKEND) { await delay(200); const idx = mockTasks.findIndex(t => t.id === id); if (idx >= 0) mockTasks.splice(idx, 1); return }
+      await request<void>(`/tasks/${id}`, { method: 'DELETE' })
+    },
+
+    move: async (id: string, toStepId: string | number, assignToUserId?: string | number): Promise<Task> => {
+      if (!USE_BACKEND) { await delay(300); const task = mockTasks.find(t => t.id === id); if (!task) throw new Error('Task not found'); task.currentStepId = String(toStepId); if (assignToUserId) { task.assigneeId = String(assignToUserId) }; return task }
+      const body: any = { toStepId: Number(toStepId) }
+      if (assignToUserId) body.assignToUserId = Number(assignToUserId)
+      const res = await request<Task>(`/tasks/${id}/move`, { method: 'POST', body: JSON.stringify(body) })
+      return res
+    },
+
     updateStatus: async (id: string, status: TaskStatus): Promise<Task> => {
       if (!USE_BACKEND) { await delay(300); const task = mockTasks.find(t => t.id === id); if (!task) throw new Error('Task not found'); return { ...task, status, updatedAt: new Date().toISOString() } }
       return request<Task>(`/tasks/${id}/move`, { method: 'POST', body: JSON.stringify({ toStepId: status }) })
@@ -122,6 +148,85 @@ export const api = {
     getHistory: async (taskId: string): Promise<TaskHistory[]> => {
       if (!USE_BACKEND) { await delay(200); return mockTaskHistory.filter(h => h.taskId === taskId) }
       return request<TaskHistory[]>(`/tasks/${taskId}/history`)
+    },
+    create: async (data: {
+      title: string
+      description?: string
+      priority?: number
+      dueDate?: string | null
+      workflowId: string
+      currentStepId?: string | null
+      assignedToUserId?: string | null
+      assignedToUserIds?: string[]
+      labelIds?: string[]
+    }): Promise<Task> => {
+      if (!USE_BACKEND) {
+        await delay(300)
+        const nextId = String(Math.max(...mockTasks.map(t => Number(t.id))) + 1)
+        const wf = mockWorkflows.find(w => w.id === data.workflowId)
+        const assignee = mockUsers.find(u => u.id === data.assignedToUserId)
+        const labels = (data.labelIds || []).map(id => ({ id, name: `Label ${id}`, color: 'gray' }))
+        const newTask: Task = {
+          id: nextId,
+          title: data.title,
+          description: data.description,
+          workflowId: data.workflowId,
+          workflowName: wf?.name || 'Unknown',
+          currentStepId: data.currentStepId || (wf?.steps?.[0]?.id ?? ''),
+          currentStepName: wf?.steps?.find(s => s.id === data.currentStepId)?.name || wf?.steps?.[0]?.name || '',
+          status: 'todo',
+          assigneeId: data.assignedToUserId || undefined,
+          assigneeName: assignee?.name,
+          assigneeAvatar: undefined,
+          creatorId: mockUsers[0].id,
+          institutionId: mockInstitutions[0].id,
+          dueDate: data.dueDate || undefined,
+          labels,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }
+        mockTasks.unshift(newTask)
+        return newTask
+      }
+
+      const body: any = {
+        title: data.title,
+        description: data.description,
+        priority: data.priority ?? 0,
+        dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : null,
+        workflowId: Number(data.workflowId),
+        currentStepId: data.currentStepId ? Number(data.currentStepId) : null,
+        // For backward compatibility include single assignedToUserId (first of array or provided value)
+        assignedToUserId: data.assignedToUserId ? Number(data.assignedToUserId) : (data.assignedToUserIds && data.assignedToUserIds.length ? Number(data.assignedToUserIds[0]) : null),
+        assignedToUserIds: data.assignedToUserIds ? data.assignedToUserIds.map(id => Number(id)) : undefined,
+        labelIds: (data.labelIds || []).map(id => Number(id)),
+      }
+
+      const res = await request<any>('/tasks', { method: 'POST', body: JSON.stringify(body) })
+
+      // Map server TaskDto -> frontend Task shape (convert numeric ids to strings)
+      const mapLabel = (l: any) => ({ id: String(l.id), name: l.name, color: l.color })
+      const mapped: Task = {
+        id: String(res.id),
+        title: res.title,
+        description: res.description,
+        workflowId: String(res.workflowId),
+        workflowName: res.workflowName ?? '',
+        currentStepId: res.currentStepId != null ? String(res.currentStepId) : '',
+        currentStepName: res.currentStepName ?? '',
+        status: (res.status as Task['status']) || 'todo',
+        assigneeId: res.assignedToUserId != null ? String(res.assignedToUserId) : undefined,
+        assigneeName: res.assignedToUserName,
+        assigneeAvatar: undefined,
+        creatorId: res.creatorId != null ? String(res.creatorId) : '0',
+        institutionId: res.institutionId != null ? String(res.institutionId) : '0',
+        dueDate: res.dueDate ?? undefined,
+        labels: (res.labels || []).map(mapLabel),
+        createdAt: res.createdAt,
+        updatedAt: res.updatedAt,
+      }
+
+      return mapped
     },
   },
 

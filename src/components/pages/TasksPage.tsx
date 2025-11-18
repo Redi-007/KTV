@@ -10,6 +10,7 @@ import { mockWorkflows, mockInstitutions, mockUsers } from '@/lib/mockData'
 import { useApp } from '@/lib/AppContext'
 import { format } from 'date-fns'
 import { FunnelSimple } from '@phosphor-icons/react'
+import { toast } from 'sonner'
 import type { Task, TaskStatus } from '@/types'
 
 export function TasksPage() {
@@ -19,10 +20,19 @@ export function TasksPage() {
   const [workflowFilter, setWorkflowFilter] = useState<string>('all')
   const [institutionFilter, setInstitutionFilter] = useState<string>('all')
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
-  const { openTaskDrawer } = useApp()
+  const { openTaskDrawer, openCreateTaskDrawer } = useApp()
 
   useEffect(() => {
     api.tasks.getAll().then(setTasks)
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      const task = e.detail
+      setTasks(prev => [task, ...prev])
+    }
+    window.addEventListener('task:created', handler as EventListener)
+    return () => window.removeEventListener('task:created', handler as EventListener)
   }, [])
 
   useEffect(() => {
@@ -136,7 +146,9 @@ export function TasksPage() {
             </SelectContent>
           </Select>
 
-          {(statusFilter !== 'all' || workflowFilter !== 'all' || institutionFilter !== 'all' || assigneeFilter !== 'all') && (
+          <div className="ml-auto">
+            <Button onClick={() => openCreateTaskDrawer()} className="mr-2">Shto Detyrë</Button>
+            {(statusFilter !== 'all' || workflowFilter !== 'all' || institutionFilter !== 'all' || assigneeFilter !== 'all') && (
             <Button
               variant="ghost"
               size="sm"
@@ -149,9 +161,12 @@ export function TasksPage() {
             >
               Pastro Filtrat
             </Button>
-          )}
+            )}
+          </div>
         </div>
       </Card>
+
+      {/* Create now handled by TaskDrawer in create mode; events are handled in component scope */}
 
       <Card>
         <Table>
