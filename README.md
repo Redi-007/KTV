@@ -27,14 +27,61 @@ A Trello-like workflow management application built with ASP.NET Core Web API an
 
 ## Features
 
-- **Complete CRUD operations** for all entities (Users, Roles, Institutions, Workflows, WorkflowSteps, Tasks, TaskStatusHistory, Labels)
-- **Specialized endpoints** for task management:
   - Move tasks between workflow steps
   - Assign tasks to users
   - View task history
-- **Entity Framework Core** with SQL Server
-- **React web client** with Kanban board interface
-- **RESTful API** with reusable DTOs designed for future React Native mobile app
+
+## Running locally (development)
+
+Prerequisites:
+- Node.js (18+ recommended)
+- npm (or pnpm/yarn)
+- .NET SDK 8.0
+
+From the repository root you can run both frontend and API concurrently:
+
+```powershell
+# install deps (root)
+npm install
+
+# run frontend + API together
+npm run start
+```
+
+Notes:
+- Frontend dev server: http://localhost:5000/
+- API (Kestrel): default shown in terminal (example: http://localhost:5028)
+- I added a `start` script that uses `concurrently` to run the frontend and API together and a `dev:api` script to run only the API.
+
+If you prefer to run them separately:
+
+```powershell
+# frontend only
+npm run dev
+
+# API only
+dotnet run --project ./src/KTV.API/KTV.API.csproj
+```
+
+What I changed
+- Replaced a Linux-only `kill` script in `package.json` with `npx kill-port 5000` and added `kill-port` as a dev dependency.
+- Fixed `vite.config.ts` fallback to use `process.cwd()` instead of `import.meta.dirname` for Windows compatibility.
+- Added `concurrently` and a `start` script to run frontend + API.
+
+If you want, I can also:
+- Add a small PowerShell wrapper that launches both services and prints combined logs to a file.
+- Consolidate the separate `client/` folder (from the merged repository) if you want to keep only one frontend.
+
+Kept frontend
+ - The merged Kanban frontend to keep is the React app under `src/` (this is the app the root `package.json` runs). A separate `client/` folder exists from the merge; it is left in the repo as a legacy copy. If you want, I can remove or merge `client/` into the main app.
+
+PowerShell helper
+ - A PowerShell helper script is available at `scripts/start-dev.ps1`. You can run it with:
+
+```powershell
+pwsh ./scripts/start-dev.ps1
+```
+
 
 ## Project Structure
 
